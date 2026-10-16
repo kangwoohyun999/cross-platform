@@ -1,0 +1,32 @@
+/* ************************************************************************************
+ *      포커스 이동: 포커스 이동 버튼을 누르면 이름 입력창을 활성화 하는 예제
+ ************************************************************************************ */
+import React, { useRef } from "react";
+import {StyleSheet, View, TextInput, Button } from "react-native";
+
+export default function App() {
+  const inputRef = useRef(null);
+
+  const focusInput = () => {
+    inputRef.current.focus(); // TextInput에 포커스
+  };
+
+  return (
+    <View style={styles.container}>
+      <TextInput style={styles.text} ref={inputRef} placeholder="이름을 입력하세요" />
+      <Button title="포커스 이동" onPress={focusInput} />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex:1,
+    alignItems:'stretch',
+    justifyContent:'center',
+    padding:30,
+  },
+  text:{
+    fontSize: 30,
+  }
+});

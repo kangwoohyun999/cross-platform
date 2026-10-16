@@ -1,0 +1,78 @@
+/* ************************************************************************************
+ *                         StyleSheet 형태 A × B 계산기
+ ************************************************************************************ */
+import React, { useState } from 'react';
+import { View,  Text, TextInput, Button, StyleSheet,} from 'react-native';
+
+export default function App() {
+  const [a, setA] = useState('');
+  const [b, setB] = useState('');
+  const [result, setResult] = useState(null);
+
+  const multiply = () => {
+    const numA = parseFloat(a);
+    const numB = parseFloat(b);
+
+    if (isNaN(numA) || isNaN(numB)) {
+      setResult('숫자를 입력하세요!');
+    } else {
+      setResult(numA * numB);
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>A × B 계산기</Text>
+
+      <TextInput
+        style={styles.input}
+        keyboardType="numeric"
+        placeholder="A 입력"
+        value={a}
+        onChangeText={setA}
+      />
+
+      <TextInput
+        style={styles.input}
+        keyboardType="numeric"
+        placeholder="B 입력"
+        value={b}
+        onChangeText={setB}
+      />
+
+      <Button title="A × B 계산" onPress={multiply} />
+
+      {result !== null && (
+        <Text style={styles.result}>결과: {result}</Text>
+      )}
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  title: {
+    fontSize: 20,
+    marginBottom: 10,
+  },
+
+  input: {
+    borderWidth: 1,
+    borderColor: 'gray',
+    width: 200,
+    marginBottom: 10,
+    textAlign: 'center',
+    fontSize: 18,
+    borderRadius: 5,
+  },
+
+  result: {
+    fontSize: 22,
+    marginTop: 20,
+  },
+});

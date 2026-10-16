@@ -1,0 +1,29 @@
+/* ************************************************************************************
+ *              useEffect: 콘솔 메시지를 출력하는 예제
+ ************************************************************************************ */
+import React, { useEffect } from "react";
+import { StyleSheet, View, Text } from "react-native";
+
+export default function App() {
+  useEffect(() => {
+    console.log("앱이 실행되었습니다! (처음 한 번만)");
+  }, []); // 빈 배열 → 최초 1회 실행
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.text}>useEffect 예제</Text>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',   // 가운데 정렬이 더 보기 좋아요
+    justifyContent: 'center',
+    padding: 30,
+  },
+  text:{
+    fontSize:30,
+  }
+});

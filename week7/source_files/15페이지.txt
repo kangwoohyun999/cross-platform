@@ -1,0 +1,31 @@
+/* ************************************************************************************
+ *              useEffect: 콘솔 메시지 + 1씩 증가
+ ************************************************************************************ */
+import React, { useState, useEffect } from "react";
+import { StyleSheet, View, Text, Button } from "react-native";
+
+export default function App() {
+  const [count, setCount] = useState(0);
+  useEffect(() => {
+    console.log("count 값이 바뀌었습니다:", count);
+  }, [count]); // count가 바뀔 때마다 실행됨
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.text}>현재 값: {count}</Text>
+      <Button title="+1 증가" onPress={() => setCount(count + 1)} />
+    </View>
+  );
+}
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',   // 가운데 정렬이 더 보기 좋아요
+    justifyContent: 'center',
+    padding: 30,
+  },
+  text:{
+    fontSize:30,
+    paddingBottom:10,
+  }
+});

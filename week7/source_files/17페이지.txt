@@ -1,0 +1,42 @@
+/* ************************************************************************************
+ *              useMemo: 카운트 +1 과 텍스트 추가 기능
+ ************************************************************************************ */
+import React, { useState, useMemo } from "react";
+import { StyleSheet, View, Text, Button } from "react-native";
+
+export default function App() {
+  const [count, setCount] = useState(0);
+  const [text, setText] = useState("");
+  const double = useMemo(() => {
+    console.log("double 계산 실행!");
+    return count * 2;
+  }, [count]);
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.text}>Count: {count}</Text>
+      <Text style={styles.text}>Double: {double}</Text>
+      <Text style={{marginBottom:1}} />
+      <Button title="카운트 +1" onPress={() => setCount(count + 1)} />
+      <Text style={{marginBottom:1}} />
+      <Button title="텍스트 추가" onPress={() => setText(text + '강남대 ')} />
+      <Text style={{marginBottom:1}} />
+      <Text style={styles.text}>Character: {text}</Text>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'stretch',   
+    justifyContent: 'center',
+    padding: 30,
+  },
+  text:{
+    fontSize:30,
+    paddingBottom:10,
+  }
+});
+
+

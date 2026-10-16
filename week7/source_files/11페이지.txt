@@ -1,0 +1,84 @@
+/* ************************************************************************************
+ *              useRef 포커스 이동: 두숫자를 곱한뒤 A입력창으로 포커스 이동
+ ************************************************************************************ */
+import React, { useState, useRef } from "react";
+import { StyleSheet, View, Text, TextInput, Button } from "react-native";
+
+export default function App() {
+  const inputRef = useRef(null);
+  const focusInput = () => {
+    // ref가 존재할 때만 포커스
+    inputRef.current?.focus();
+  };
+
+  const [a, setA] = useState('');         // 첫 번째 숫자
+  const [b, setB] = useState('');         // 두 번째 숫자
+  const [result, setResult] = useState(null); // 계산 결과
+
+  const multiply = () => {
+    const numA = parseFloat(a);
+    const numB = parseFloat(b);
+
+    if (isNaN(numA) || isNaN(numB)) {
+      setResult('숫자를 입력하세요!');
+    } else {
+      setResult(numA * numB);
+    }
+  };
+
+  const handlePress = () => {
+    multiply();      // 계산
+    focusInput();    // A 입력창으로 포커스 이동 (선택)
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={{ fontSize: 20, marginBottom: 10 }}>A × B 계산기</Text>
+
+      <TextInput
+        ref={inputRef}
+        style={styles.input}
+        keyboardType="numeric"
+        placeholder="A 입력"
+        value={a}
+        onChangeText={setA}
+        returnKeyType="next"
+        onSubmitEditing={() => { /* 엔터키로 다음 입력으로 이동시키고 싶으면 여기에 */ }}
+      />
+
+      <TextInput
+        style={styles.input}
+        keyboardType="numeric"
+        placeholder="B 입력"
+        value={b}
+        onChangeText={setB}
+      />
+
+      <Button title="A × B 계산" onPress={handlePress} />
+
+      {result !== null && (
+        <Text style={{ fontSize: 22, marginTop: 20 }}>결과: {result}</Text>
+      )}
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',   // 가운데 정렬이 더 보기 좋아요
+    justifyContent: 'center',
+    padding: 30,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: 'gray',
+    width: 200,
+    marginBottom: 10,
+    textAlign: 'center',
+    fontSize: 18,
+    borderRadius: 5,
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+  },
+});
