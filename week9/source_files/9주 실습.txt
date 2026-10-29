@@ -1,0 +1,405 @@
+/********************************************************************************
+              1.  LoginIn 메인 App.js  
+******************************************************************************* */
+import React from "react";
+import { AuthProvider, AuthContext } from "./AuthContext";
+import LoginScreen from "./LoginScreen";
+import MainScreen from "./MainScreen";
+
+// 로그인 상태에 따라 화면 선택
+const Router = () => {
+
+  return (
+    <AuthContext.Consumer>
+      {(value) => (
+        value.isAuthenticated
+          // 로그인 상태
+          ? <MainScreen />
+          // 로그아웃 상태
+          : <LoginScreen />
+      )}
+    </AuthContext.Consumer>
+  );
+};
+
+export default function App() {
+  return (
+    <AuthProvider>
+      <Router />
+    </AuthProvider>
+  );
+}
+
+/********************************************************************************
+              2.  외부파일: LoginScreen.js  
+******************************************************************************* */
+import React, { useState } from "react";
+import {  View, Text, TextInput,  Pressable, Image, StyleSheet, ActivityIndicator, } from "react-native";
+
+// Context의 전역 상태를 사용하기 위한 Custom Hook
+import { useAuth } from "./AuthContext";
+
+const LoginScreen = () => {
+
+  // Context에서 로그인 관련 전역 데이터 가져오기
+  const {
+    signIn,
+    loading,
+    error
+  } = useAuth();
+
+  // 현재 화면에서 사용하는 지역 상태
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [secure, setSecure] = useState(true);
+
+  // 이메일이 입력되고
+  // 비밀번호가 6자 이상인지 확인
+  const canLogin =
+    email.trim().length > 0 &&
+    password.length >= 6;
+
+  return (
+    <View style={styles.container}>
+
+      {/* 학교 로고 */}
+      <Image
+        source={require("./assets/kangnam.png")}
+        style={styles.logo}
+        resizeMode="contain"
+      />
+
+      <View style={styles.form}>
+        <Text style={styles.welcome}>
+          WELCOME BACK
+        </Text>
+        <Text style={styles.title}>
+          로그인
+        </Text>
+
+        {/* 이메일 */}
+        <Text style={styles.label}>
+          이메일
+        </Text>
+
+        <TextInput
+          style={styles.input}
+          placeholder="you@example.com"
+          value={email}
+          onChangeText={setEmail}
+          autoCapitalize="none"
+          keyboardType="email-address"
+        />
+
+        {/* 비밀번호 */}
+        <Text style={styles.label}>
+          비밀번호
+        </Text>
+
+        <View style={styles.passwordBox}>
+
+          <TextInput
+            style={styles.passwordInput}
+            placeholder="6자 이상 비밀번호"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry={secure}
+          />
+
+          {/* 비밀번호 보기 / 숨기기 */}
+          <Pressable
+            onPress={() => setSecure(!secure)}
+          >
+            <Text style={styles.showText}>
+              {secure ? "보기" : "숨기기"}
+            </Text>
+          </Pressable>
+
+        </View>
+
+        {/* 로그인 오류 메시지 */}
+        {error !== "" && (
+          <Text style={styles.error}>
+            {error}
+          </Text>
+        )}
+
+        {/* 로그인 버튼 */}
+        <Pressable
+          style={[
+            styles.loginButton,
+            canLogin
+              ? styles.loginEnabled
+              : styles.loginDisabled,
+          ]}
+          disabled={!canLogin || loading}
+          onPress={() => signIn(email, password)}
+        >
+          {loading ? (<ActivityIndicator color="white" />) : (<Text style={styles.loginText}> 로그인 </Text>)}
+        </Pressable>
+
+        {/* 데모 계정 안내 */}
+        <Text style={styles.demo}>
+          데모 계정: demo@example.com / pass123
+        </Text>
+      </View>
+    </View>
+  );
+};
+export default LoginScreen;
+
+const styles = StyleSheet.create({
+
+  container: {
+    flex: 1,
+    backgroundColor: "#ffffff",
+    paddingHorizontal: 20,
+  },
+  logo: {
+    width: 140,
+    height: 140,
+
+    alignSelf: "center",
+
+    marginTop: 100,
+    marginBottom: 80,
+  },
+  form: {
+    width: "100%",
+  },
+  welcome: {
+    fontSize: 12,
+    color: "#89919e",
+    marginBottom: 5,
+  },
+  title: {
+    fontSize: 27,
+    fontWeight: "bold",
+    color: "#111827",
+    marginBottom: 25,
+  },
+  label: {
+    fontSize: 14,
+    color: "#333333",
+    marginBottom: 8,
+    marginTop: 10,
+  },
+  input: {
+    height: 48,
+
+    borderWidth: 1,
+    borderColor: "#d7dce2",
+    borderRadius: 10,
+
+    paddingHorizontal: 12,
+
+    fontSize: 14,
+
+    backgroundColor: "#ffffff",
+  },
+  passwordBox: {
+    height: 48,
+
+    flexDirection: "row",
+    alignItems: "center",
+
+    borderWidth: 1,
+    borderColor: "#d7dce2",
+    borderRadius: 10,
+
+    paddingHorizontal: 12,
+  },
+  passwordInput: {
+    flex: 1,
+    fontSize: 14,
+  },
+  showText: {
+    color: "#1677ff",
+    fontWeight: "bold",
+  },
+  loginButton: {
+    height: 48,
+
+    justifyContent: "center",
+    alignItems: "center",
+
+    borderRadius: 10,
+
+    marginTop: 15,
+  },
+  loginEnabled: {
+    backgroundColor: "#1677ff",
+  },
+  loginDisabled: {
+    backgroundColor: "#aab2bf",
+  },
+  loginText: {
+    color: "#ffffff",
+    fontSize: 15,
+    fontWeight: "bold",
+  },
+  error: {
+    color: "red",
+    marginTop: 8,
+  },
+  demo: {
+    fontSize: 12,
+    color: "#89919e",
+    marginTop: 12,
+  },
+});
+
+/********************************************************************************
+              3.  외부파일: MainScreen.js 
+******************************************************************************* */
+import React from "react";
+import { View, Text, Pressable, StyleSheet, } from "react-native";
+import { useAuth } from "./AuthContext";
+
+
+const MainScreen = () => {
+
+  // Context의 전역 데이터 사용
+  const { user, token, signOut } = useAuth();
+
+
+  return (
+    <View style={styles.container}>
+
+      <Text style={styles.title}>
+        환영합니다 👋
+      </Text>
+      <Text style={styles.user}>
+        {user?.name} ({user?.email})
+      </Text>
+      <Text style={styles.token}>
+        토큰: {token}
+      </Text>
+      
+      {/* 로그아웃 버튼 */}
+      <Pressable
+        style={styles.logoutButton}
+        onPress={signOut}
+      >
+        <Text style={styles.logoutText}>
+          로그아웃
+        </Text>
+      </Pressable>
+
+    </View>
+  );
+};
+export default MainScreen;
+
+const styles = StyleSheet.create({
+
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "white",
+  },
+
+  title: {
+    fontSize: 23,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+
+  user: {
+    fontSize: 14,
+    color: "#596273",
+    marginBottom: 8,
+  },
+
+  token: {
+    fontSize: 12,
+    color: "#b0b5bd",
+    marginBottom: 20,
+  },
+
+  logoutButton: {
+    backgroundColor: "#ff4b4b",
+    paddingHorizontal: 20,
+    paddingVertical: 13,
+    borderRadius: 10,
+  },
+
+  logoutText: {
+    color: "white",
+    fontWeight: "bold",
+  },
+
+});
+
+/********************************************************************************
+              4.  외부파일: AuthContext.js 
+******************************************************************************* */
+import React, { createContext, useContext, useState, } from "react";
+
+// 1. Context 생성
+export const AuthContext = createContext();
+
+// 2. Provider 컴포넌트
+export const AuthProvider = ({ children }) => {
+
+  // 전역 로그인 상태
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  // 로그인 처리 중 상태
+  const [loading, setLoading] = useState(false);
+
+  // 오류 메시지
+  const [error, setError] = useState("");
+
+  // 로그인 함수
+  const signIn = (email, password) => {
+
+    setLoading(true);
+    setError("");
+
+    // 서버 통신을 흉내내기 위해 setTimeout 사용
+    setTimeout(() => {
+
+      // 데모 계정 확인
+      if (
+        email === "demo@example.com" &&
+        password === "pass123"
+      ) {
+        // 로그인 성공
+        setIsAuthenticated(true);
+        setError("");
+      } else {
+        // 로그인 실패
+        setError("이메일 또는 비밀번호가 올바르지 않습니다.");
+      }
+      setLoading(false);
+    }, 800);
+  };
+
+  // 로그아웃 함수
+  const signOut = () => {
+    setIsAuthenticated(false);
+  };
+
+  return (
+
+    // Provider를 이용해 전역 데이터 제공
+    <AuthContext.Provider
+      value={{
+        isAuthenticated,
+        loading,
+        error,
+        signIn,
+        signOut,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
+};
+
+// 3. useContext를 쉽게 사용하기 위한 함수
+export const useAuth = () => {
+  return useContext(AuthContext);
+};

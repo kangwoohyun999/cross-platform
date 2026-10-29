@@ -1,0 +1,63 @@
+/********************************************************************************
+              1. Consumer컴포넌트:  메인 App.js
+******************************************************************************* */
+import React from "react";
+import styled from "styled-components/native";
+import User from "./src/components/User";
+
+const Container = styled.View`
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+`;
+
+export default function App() {
+  return (
+      <Container>
+        <User />
+      </Container>
+  );
+}
+
+/********************************************************************************
+               2. Consumer컴포넌트:  외부파일: src/components/User.js
+******************************************************************************* */
+import React, { useContext } from "react";
+import styled from "styled-components/native";
+import UserContext  from "../contexts/UserContext";
+
+// 텍스트 스타일
+const StyledText = styled.Text`
+  font-size: 40px;
+  color: blue;
+`;
+
+// 화면 전체 중앙 정렬
+const Container = styled.View`
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+`;
+
+const User = () => {
+//  const value = useContext(UserContext);
+
+  return (
+    <UserContext.Consumer>
+      {(value) => (
+        <Container>
+          <StyledText> Name: {value.name} </StyledText>
+        </Container>
+      )}
+    </UserContext.Consumer>
+  );
+};
+
+export default User;
+
+/********************************************************************************
+        3. Consumer컴포넌트:  외부파일: src/contexts/UserContext.js
+******************************************************************************* */
+import { createContext } from "react";
+const UserContext = createContext({name: '홍길동'});
+export default UserContext;

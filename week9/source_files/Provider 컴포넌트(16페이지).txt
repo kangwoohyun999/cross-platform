@@ -1,0 +1,74 @@
+/********************************************************************************
+              1.  Provider 컴포넌트:  메인 App.js  
+******************************************************************************* */
+import React from "react";
+import styled from "styled-components/native";
+import User from "./src/components/User";
+import UserContext from "./src/contexts/UserContext";
+
+const Container = styled.View`
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+`;
+
+export default function App() {
+   
+  return (
+    
+    // Provider가 하위 컴포넌트에 사용자 정보를 제공
+    <UserContext.Provider
+      value={{
+        name: "홍길동",
+        age: 25
+      }}
+    >
+      <Container>
+        <User />
+      </Container>
+    </UserContext.Provider>
+  );
+}
+
+/********************************************************************************
+              2.  Provider 컴포넌트:  외부파일: src/components/User.js
+******************************************************************************* */
+import React, { useContext } from "react";
+import styled from "styled-components/native";
+import UserContext  from "../contexts/UserContext";
+
+// 텍스트 스타일
+const StyledText = styled.Text`
+  font-size: 40px;
+  color: blue;
+`;
+
+// 화면 전체 중앙 정렬
+const Container = styled.View`
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+`;
+
+const User = () => {
+  return (
+    // UserContext.Provider에서 전달한 값을
+    // Consumer를 통해 받아서 사용
+    <UserContext.Consumer>
+      {/* value에는 Context에서 전달된 데이터가 들어옴 예: { name: "홍길동" }   */}
+      {(value) => (
+        <Container>
+          <StyledText> Name: {value.name} </StyledText>
+        </Container>
+      )}
+    </UserContext.Consumer>
+  );
+};
+export default User;
+
+/********************************************************************************
+        3. Provider 컴포넌트:  외부파일: src/contexts/UserContext.js
+******************************************************************************* */
+import { createContext } from "react";
+const UserContext = createContext({name: '홍길동'});
+export default UserContext;

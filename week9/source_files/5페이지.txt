@@ -1,0 +1,22 @@
+/* App.js 파일 내용 */
+import App from "./src/App";
+
+export default App;
+
+
+/* src/App.js 파일 내용 */
+import React from 'react';
+import styled from 'styled-components/native';
+
+const Container = styled.View`
+  flex: 1;
+  background-color: #f55353;
+  justify-content: center;
+  align-items: center;
+`;
+
+const App = () => {
+  return <Container />;
+};
+
+export default App;
