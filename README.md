@@ -25,3 +25,11 @@ code .
 1. App.js 코드 작성
 2. 터미널 -> cmd 선택
 3. ```npm start``` 입력
+
+## 가상 스마트폰 Expo 앱 설치
+npm start 후 a 키 누르기
+
+## expo 캐시 제거 후 시작
+```
+npx expo start -c
+```
