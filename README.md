@@ -2,7 +2,7 @@
 
 # cmd
 
-New 버전(3번부터 진행)
+New 버전 (3번부터 진행)
 ```
 npx create-expo-app@latest myApp
 ```
