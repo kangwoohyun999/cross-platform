@@ -1,6 +1,13 @@
 # Expo 프로젝트 생성하기
 
 ## cmd
+
+
+# New 버전(3번부터 진행)
+```
+npx create-expo-app@latest myApp
+```
+
 1. expo 설치
 ```
 npm install expo-cli
@@ -9,11 +16,6 @@ npm install expo-cli
 2. myApp 폴더 생성 (template = blank)
 ```
 expo init myApp
-```
-
-2-1. New 버전
-```
-npx create-expo-app@latest myApp
 ```
 
 3. myApp 폴더로 이동 (VS Code로 바로 열어도 됨)
