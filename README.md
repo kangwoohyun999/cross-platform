@@ -11,6 +11,11 @@ npm install expo-cli
 expo init myApp
 ```
 
+2-1. New 버전
+```
+npx create-expo-app@latest myApp
+```
+
 3. myApp 폴더로 이동 (VS Code로 바로 열어도 됨)
 ```
 cd myApp
